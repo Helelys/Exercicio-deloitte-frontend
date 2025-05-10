@@ -2,11 +2,13 @@ package com.example.deloitte.gerenciamento.de.salas.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Sala {
 
     @Id

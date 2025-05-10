@@ -1,34 +1,40 @@
 package com.example.deloitte.gerenciamento.de.salas.controller;
 
 import com.example.deloitte.gerenciamento.de.salas.model.Sala;
-import com.example.deloitte.gerenciamento.de.salas.repository.SalaRepository;
-import lombok.AllArgsConstructor;
+import com.example.deloitte.gerenciamento.de.salas.service.SalaService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/salas")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SalaController {
 
-    private SalaRepository salaRepository;
+    private final SalaService salaService;
 
-    @GetMapping("/listar")
-    public List<Sala> listarSalas() {
-        System.out.println("Lista de salas:");
-        return salaRepository.findAll();
+    @GetMapping
+    public ResponseEntity<List<Sala>> terTodasAsSalas() {
+        return ResponseEntity.ok(salaService.todasAsSalas());
     }
 
-    @PostMapping("/adicionar")
-    public Sala adicionarSala(@RequestBody Sala sala) {
-        System.out.println("Sala adicionada!");
-        return salaRepository.save(sala);
+    @PostMapping
+    public ResponseEntity<Sala> criarSala(@RequestBody Sala sala) {
+        return new ResponseEntity<>(salaService.criarSala(sala), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void removerSala(@PathVariable Long id) {
-        System.out.println("Sala deletada!");
-        salaRepository.deleteById(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<Sala> terSalaPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(salaService.salaPorId(id));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarSala(@PathVariable Long id) {
+        salaService.deletarSala(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
